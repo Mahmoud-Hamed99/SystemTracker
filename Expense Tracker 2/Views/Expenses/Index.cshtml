@@ -1,0 +1,128 @@
+﻿@model IEnumerable<Expense_Tracker_2.Models.Expense>
+
+@{
+    ViewData["Title"] = "Index";
+ //   Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .btn-search {
+	  background: #424242;
+	  border-radius: 0;
+	  color: #fff;
+	  border-width: 1px;
+	  border-style: solid;
+	  border-color: #1c1c1c;
+	}
+	.btn-search:link, .btn-search:visited {
+	  color: #fff;
+	}
+	.btn-search:active, .btn-search:hover {
+	  background: #1c1c1c;
+	  color: #fff;
+	}
+</style>
+
+<h1>All Expenses</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<br />
+
+<div class="row justify-content-center">
+      <div class="col-4">
+        <label >Start Date</label>
+    </div>
+    <div class="col-4">
+        <label >End Date</label>
+    </div>
+</div>
+<div class="row justify-content-center">
+    <div class="col-4">
+        <input type="date" id="startDate" class="form-control col-10" />
+    </div>
+    <div class="col-4">
+        <input type="date" id="endDate" class="form-control col-10" />
+    </div>
+
+    <div class="col-2">
+        @*<button class="btn" onclick="SearchWithDates()">Search</button>*@
+        <span class="input-group-btn">
+        <button class="btn btn-search" onclick="SearchWithDates()" type="button"><i class="fa fa-search fa-fw"></i> Search</button>
+      </span>
+    </div>
+
+
+</div>
+<br />
+
+ <div id="container" class="col-12">
+   @{
+        await Html.RenderPartialAsync("_Expenses", Model);
+    }
+ </div>
+
+@*<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.expenseCategory)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExpenseDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.expenseCategory.ExpenseCategoryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExpenseDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ExpenseId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ExpenseId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ExpenseId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+*@
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $("document").ready(function(){
+    console.log("hi");
+    })
+
+    function SearchWithDates(){
+    console.log("enter ajax") ;
+        $.ajax({
+                  url: '/expenses/IndexWithDates',
+                  type: "Get",
+                  data: {
+                     startDate: $("#startDate").val(),
+                     endDate:$("#endDate").val()
+                    },
+                  success: function (response) {
+                     $("#container").html(response) ;
+                      console.log("success") ;
+                  },
+                  error: function () {
+                      console.log("fail") ;
+                     }
+                  });
+
+    }
+</script>
